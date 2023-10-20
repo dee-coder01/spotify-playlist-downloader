@@ -1,7 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
+import dotenv from "dotenv";
+dotenv.config();
 export default defineConfig({
-  testDir: "./src/script",
+  testDir: "./src",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -14,7 +16,7 @@ export default defineConfig({
   reporter: "html",
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    trace: "on-first-retry",
+     trace: "on-first-retry",
     headless: false,
     video: "retain-on-failure",
     screenshot: "only-on-failure",

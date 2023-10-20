@@ -2,27 +2,31 @@ import { test } from "@playwright/test";
 import { Spotify } from "./spotify";
 import { Youtube } from "./youtube";
 import { Downloader } from "./downloader";
+import { UserCredential } from "./types";
 test.describe("should first", async () => {
   let spotify: Spotify;
   let youtube: Youtube;
   let downloader: Downloader;
-  let playListName: string = "Bollywood";
+  let playListName: string = process.env.PLAYLIST || "Bollywood";
   test.beforeEach(async ({ page }) => {
     spotify = new Spotify(page);
     youtube = new Youtube(page);
     downloader = new Downloader(page);
   });
   test("this is test", async () => {
-    //facebook login creadentials
-    //can comment login step if want to download public playlist 
     await test.step("Login to spotify", async () => {
-      const userInfo = {
-        userName: "userName",
-        password: "pass",
+      const userInfo: UserCredential = {
+        userName: process.env.UNAME || "",
+        password: process.env.PASS || "",
       };
-      await spotify.loginToSpotify(userInfo);
+      if (process.env.UNAME) await spotify.loginToSpotify(userInfo);
+      else
+        console.warn(
+          "Skipping login step.\nOnly public playlist can be downloaded."
+        );
     });
     await test.step("Get list of songs from the playlist.", async () => {
+      // playListName = "Bollywood";
       await spotify.getListOfSongs(playListName);
     });
     await test.step("Get youtube links.", async () => {
